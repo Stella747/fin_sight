@@ -1,0 +1,36 @@
+﻿# Python virtual environment
+.venv/
+venv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Testing and tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# Generated synthetic datasets
+data/generated/
+
+# Trained model artifacts
+models/
+
+# Generated explainability charts and test reports
+reports/shap/*.png
+reports/test-results.xml
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
