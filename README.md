@@ -1,46 +1,46 @@
-# FinSight — AI-Powered Financial Decision Intelligence
+# FinSight
 
-FinSight is a local-first financial analytics and decision-support prototype that combines customer analytics, churn prediction, explainable AI, retention-offer optimization, experimentation, and an interactive dashboard.
+FinSight is a local-first financial analytics prototype that combines synthetic customer data, churn prediction, retention-offer optimization, experiment analysis, and an interactive dashboard. A FastAPI service exposes churn predictions for customer feature records.
 
-**Project status:** Working prototype  
-**Data:** Synthetic customer data only  
-**Cost:** Designed to run locally using free, open-source tools
+> **Portfolio demonstration only:** Customer data and experiment outcomes are synthetic. Model scores, offer values, and campaign results are illustrative and are not validated for real financial decisions.
 
 ## Features
 
-- **Customer analytics:** Customer-level data preparation, transaction aggregation, and segment analysis using pandas and DuckDB.
-- **Churn prediction:** A scikit-learn pipeline that estimates customer churn probability.
-- **Explainable AI:** Model coefficients and SHAP visualizations to help interpret model behavior.
-- **Retention optimization:** OR-Tools selects retention offers under configurable budget and offer-count constraints.
-- **Experiment analysis:** A simulated A/B experiment calculates conversion rates, absolute lift, confidence intervals, and statistical significance.
-- **Interactive dashboard:** Streamlit and Plotly present analytics and recommendations.
-- **Prediction API:** FastAPI provides health-check and customer churn-prediction endpoints.
-- **Automated tests:** pytest checks project files, data integrity, model outputs, business rules, and API validation.
+- **Customer analytics:** Generate source tables, build a customer-level dataset, aggregate transactions, and summarize customer segments.
+- **Churn modeling:** Train a scikit-learn classification pipeline and inspect model coefficients and SHAP explanations.
+- **Retention optimization:** Select offers with OR-Tools subject to budget and offer-count constraints.
+- **Experiment analysis:** Simulate a control/treatment experiment and calculate conversion rates, lift, confidence intervals, and a p-value.
+- **Interactive dashboard:** Explore results across five Streamlit pages: Executive Overview, Customer Intelligence, Retention Optimization, Experimentation, and Model Explainability.
+- **Prediction API:** Validate customer features and return churn probabilities with FastAPI and Pydantic.
 
-## Technology stack
+## Architecture
 
-Python, pandas, NumPy, DuckDB, scikit-learn, SHAP, OR-Tools, Streamlit, Plotly, FastAPI, Uvicorn, pytest, and HTTPX.
+- `scripts/generate_data.py` creates a synthetic Excel workbook with customer, product-usage, and transaction tables.
+- `scripts/build_customer_360.py` validates and combines the source tables into a customer-level CSV.
+- `scripts/run_analytics.py`, `scripts/train_churn_model.py`, `scripts/explain_churn_model.py`, `scripts/explain_with_shap.py`, `scripts/optimize_retention.py`, and `scripts/run_experiment.py` create the analysis outputs, model, explanations, recommendations, and simulated experiment results.
+- `app.py` reads generated data and model artifacts to power the Streamlit dashboard.
+- `api.py` loads the trained model and serves validated prediction requests.
+- `tests/` covers project artifacts, data integrity, model outputs, retention rules, experiment calculations, and API validation.
 
-## Local setup
+Generated datasets, model files, and SHAP images are excluded from version control. Generate these local artifacts before starting the dashboard, making API predictions, or running the full test suite.
+
+## Tech stack
+
+Python, pandas, NumPy, DuckDB, scikit-learn, SHAP, OR-Tools, Streamlit, Plotly, FastAPI, Pydantic, Uvicorn, pytest, and HTTPX.
+
+## Quick Start
 
 Requirements: Python and Git.
 
-Create and activate a virtual environment in the project root:
+Create a virtual environment and install the pinned dependencies:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
 ```
 
-Install the project dependencies used by the scripts, dashboard, API, and tests:
-
-```powershell
-python -m pip install pandas numpy openpyxl duckdb scikit-learn shap matplotlib ortools scipy statsmodels streamlit plotly fastapi uvicorn httpx pytest joblib
-```
-
-## Generate the data and model
-
-Run the scripts from the project root, in this order:
+From the project root, generate the data, model, explanations, recommendations, and experiment results in order:
 
 ```powershell
 python scripts/generate_data.py
@@ -53,53 +53,43 @@ python scripts/optimize_retention.py
 python scripts/run_experiment.py
 ```
 
-These scripts create the synthetic datasets, model, explanations, recommendations, and experiment results used by the dashboard and API.
-
-## Run the dashboard
+### Run the dashboard
 
 ```powershell
 python -m streamlit run app.py
 ```
 
-## Run the prediction API
+### Run the prediction API
 
 ```powershell
 python -m uvicorn api:app --reload
 ```
 
-Local endpoints:
+API routes:
 
 - `GET /` — API welcome message
 - `GET /health` — model availability
-- `POST /predict` — predict churn from customer features
+- `POST /predict` — predict churn from 17 validated customer feature fields
 - `/docs` — interactive API documentation
 
-The prediction request requires the 17 feature fields defined by the API schema.
+### Run automated tests
 
-## Run automated tests
+After generating the local artifacts, run:
 
 ```powershell
 python -m pytest -v
 ```
 
-The current suite contains 27 tests. Tests should be rerun after changes to the data pipeline, model, optimization logic, or API.
+The current suite contains 27 tests.
 
-## Important limitations
+## Limitations
 
-- All customer records and experiment results are synthetic.
-- Retention success rates, customer values, and channel costs are assumptions for demonstrating optimization—not validated business estimates.
-- Churn probabilities come from a prototype model trained on synthetic data. They should not be interpreted as calibrated real-world risk scores.
-- A statistically significant result in the simulated experiment does not establish that a real campaign will improve conversion.
-- The project is intended for learning and portfolio demonstration, not production financial decision-making.
-
-## Future improvements
-
-- Improve temporal validation and model evaluation.
-- Add model calibration and decision-threshold analysis.
-- Add stronger automated tests and API error handling.
-- Connect the dashboard to the prediction API.
-- Document reproducible experiments and deployment options.
+- Customer records and experiment outcomes are synthetic.
+- The churn model learns patterns from a generated target and should not be treated as a calibrated real-world risk model.
+- Retention success rates, customer values, and channel costs are illustrative assumptions, not measured business estimates.
+- The experiment generator uses a preselected treatment effect; its results do not establish that a real campaign will improve conversion.
+- This project is for learning and portfolio demonstration, not production financial decision-making.
 
 ## License
 
-Add a license before distributing the project as open source. Until a license is selected, reuse permissions are not explicitly granted.
+No license is currently included. Add one if you want to grant specific reuse rights.

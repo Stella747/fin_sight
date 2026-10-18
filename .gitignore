@@ -2,6 +2,11 @@
 .venv/
 venv/
 
+# JavaScript dependencies and build output (for future tooling)
+node_modules/
+dist/
+build/
+
 # Python cache files
 __pycache__/
 *.py[cod]
