@@ -90,6 +90,4 @@ The current suite contains 27 tests.
 - The experiment generator uses a preselected treatment effect; its results do not establish that a real campaign will improve conversion.
 - This project is for learning and portfolio demonstration, not production financial decision-making.
 
-## License
 
-No license is currently included. Add one if you want to grant specific reuse rights.
